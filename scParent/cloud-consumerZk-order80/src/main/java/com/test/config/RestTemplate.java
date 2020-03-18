@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 public class RestTemplate {
 
     @Bean
-    @LoadBalanced
+    //@LoadBalanced
     public org.springframework.web.client.RestTemplate createRestTemplate(){
         return new org.springframework.web.client.RestTemplate();
     }

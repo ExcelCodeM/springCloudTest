@@ -13,9 +13,14 @@ import org.springframework.web.bind.annotation.PathVariable;
  */
 
 @Component
-@FeignClient(value = "CLOUD-PAYMENT-SERVICE")
+//@FeignClient(value = "CLOUD-PAYMENT-SERVICE")
+@FeignClient(value = "CLOUD-PAYMENT-HYSTRIX-SERVICE", fallback = PaymentClientImpl.class)
 public interface PaymentClient {
 
-    @GetMapping(value = "/payment/get/{id}")
+//    @GetMapping(value = "/payment/get/{id}")
+//    R getPayment(@PathVariable("id") Long id);
+
+
+    @GetMapping(value = "/hystrxTimeout/{id}")
     R getPayment(@PathVariable("id") Long id);
 }

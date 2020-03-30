@@ -29,4 +29,10 @@ public class HystrixController {
         return new R(200,"成功",hystrixService.hystrixTimeout(id));
     }
 
+
+    @GetMapping("/hystrix.circuitBreaker/{id}")
+    public R paymentCircuitBreaker(@PathVariable("id") Integer id){
+        return new R(200,"成功",hystrixService.paymentCircuitBreaker(id));
+    }
+
 }

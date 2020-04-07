@@ -44,4 +44,9 @@ public class PaymentController {
         }
     }
 
+    @GetMapping("/payment/port")
+    public R getPort(){
+        return new R(200,"ok",serverPort);
+    }
+
 }

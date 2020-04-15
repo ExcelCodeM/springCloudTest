@@ -1,0 +1,30 @@
+server:
+  port: 8801
+
+spring:
+  application:
+    name: cloud-stream-provider
+  cloud:
+    stream:
+      binders:
+        defaultRabbit: #设置要绑定的mq信息，名字自己定
+          type: rabbit  #设置绑定mq类型，rabbitmq/kafka
+          environment:  #设置绑定mq的环境
+            spring:
+              rabbitmq:
+                host: localhost #mq的主机地址
+                port: 5672  # mq端口号
+                username: guest #mq用户名
+                password: guest #mq密码
+      bindings:
+        output: #消息生产者配置
+          destination: studyExchange #mq中channel/topic名称
+          content-type: application/json #存储数据类型
+          binder: defaultRabbit #设置要绑定的mq的具体设置（上面binders）
+
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://eureka7001.com:7001/eureka

@@ -1,0 +1,51 @@
+server:
+  port: 9003
+
+spring:
+  application:
+    name: sentinel-payment-provider
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 47.113.102.175:8848
+    sentinel:
+      transport:
+        dashboard: localhost:8080
+      datasource:
+        ds:
+          nacos:
+            server-addr: 47.113.102.175:8848
+            dataId: sentinel-payment-provider
+            groupId: DEFAULT_GROUP
+            data-type: json
+            rule-type: flow
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    password: 123456
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://47.113.102.175:3306/db2020?characterEncoding=utf-8&useSSL=false
+    username: root
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.test.entity
+
+
+#sentinel持久化，保存到nacos中， nacos中具体配置，
+#[
+#  {
+#    "resource":"sqlValue",   资源编号
+#    "limitApp":"default",    来源应用
+#    "grade":1,           阀值类型，1QPS，0线程数
+#    "count":1,           单机阀值
+#    "strategy":0,        流控模式 0直接，1关联， 2链路
+#    "controlBehavior":0,  流控效果 0快速失败 1Warm up 2排队等待
+#    "clusterMode":false   是否集群
+#  }
+#]

@@ -1,9 +1,9 @@
 server:
-  port: 83
+  port: 8401
 
 spring:
   application:
-    name: nacos-consumer
+    name: cloud-sentinel-service
   cloud:
     nacos:
       discovery:
@@ -12,12 +12,9 @@ spring:
       transport:
         dashboard: localhost:8080
 
+
 management:
   endpoints:
     web:
       exposure:
         include: "*"
-
-feign:
-  sentinel:
-    enabled: true

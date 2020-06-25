@@ -1,35 +1,44 @@
 package com.test.controller;
 
+
+import com.test.entity.User;
+import com.test.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
- * @author ：Breeze
- * @date ：Created in 2020/6/20 19:40
- * @description：
+ * <p>
+ *  前端控制器
+ * </p>
+ *
+ * @author Breeze
+ * @since 2020-06-25
  */
-
-@RestController
+@Controller
+@RequestMapping("/user")
 public class UserController {
 
-    @GetMapping("testOne")
-    public String testOne(){
-        return "登录成功！ test1";
-    }
+    @Autowired
+    private UserService userService;
 
-    @GetMapping("testTwo")
-    public String testTwo(){
-        return "登录成功！ test2";
-    }
+    @ResponseBody
+    @GetMapping("/save")
+    public String saveUser(){
 
-    @GetMapping("testThree")
-    public String testThree(){
-        return "登录成功！ test3";
-    }
+        User user = new User();
+        user.setUsername("zhangsan");
+        user.setPassword("123456");
+        user.setFullname("张三");
+        user.setMobile("12345678900");
+        userService.save(user);
 
-    @GetMapping("testFour")
-    public String testFour(){
-        return "登录成功！ test4";
+        return "ok";
+
     }
 
 }
+

@@ -25,18 +25,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/testOne", "/testTwo").authenticated()
                 .anyRequest().permitAll()
                 .and()
-                .formLogin();
+                .formLogin()
+                .loginPage("/login")
+                .loginProcessingUrl("/authentication/form")
+                .successForwardUrl("/success")
+                .permitAll()
+                .and()
+                .csrf()
+                .disable();
     }
 
-    @Bean
-    @Override
-    protected UserDetailsService userDetailsService() {
-        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-        manager.createUser(User.withUsername("zhangsan").password("123456").authorities("p1").build());
-        manager.createUser(User.withUsername("lisi").password("123456").authorities("p2").build());
-        return manager;
-
-    }
+//    @Bean
+//    @Override
+//    protected UserDetailsService userDetailsService() {
+//        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
+//        manager.createUser(User.withUsername("zhangsan").password("123456").authorities("p1").build());
+//        manager.createUser(User.withUsername("lisi").password("123456").authorities("p2").build());
+//        return manager;
+//
+//    }
 
     @Bean
     public PasswordEncoder getPasswordEncoder(){

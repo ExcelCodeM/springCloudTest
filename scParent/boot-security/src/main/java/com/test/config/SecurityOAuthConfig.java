@@ -39,7 +39,7 @@ public class SecurityOAuthConfig extends AuthorizationServerConfigurerAdapter {
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        //使用内存配置，只是了解入门，改用jdbc配置，数据存入oauth_client_details表中
+        //使用内存配置，只是了解入门，改用jdbc配置，数据存入oauth_access_token表中
 //        clients.inMemory()  //使用in‐memory存储
 //                .withClient("client")   // client_id
 //                .secret("secret")

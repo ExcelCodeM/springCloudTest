@@ -2,10 +2,7 @@ package com.test.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
-import java.util.Date;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,7 +10,7 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 用户表
+ * 用户角色表
  * </p>
  *
  * @author Breeze
@@ -22,8 +19,8 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("tb_user")
-public class User implements Serializable {
+@TableName("tb_user_role")
+public class UserRole implements Serializable {
 
     private static final long serialVersionUID=1L;
 
@@ -31,30 +28,14 @@ public class User implements Serializable {
     private Long id;
 
     /**
-     * 用户名
+     * 用户 ID
      */
-    private String username;
+    private Long userId;
 
     /**
-     * 密码，加密存储
+     * 角色 ID
      */
-    private String password;
-
-    /**
-     * 注册手机号
-     */
-    private String phone;
-
-    /**
-     * 注册邮箱
-     */
-    private String email;
-
-    @TableField(fill = FieldFill.INSERT)
-    private Date created;
-
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    private Date updated;
+    private Long roleId;
 
 
 }

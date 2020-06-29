@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.test.mapper.PermissionMapper">
+
+    <select id="getUserPermission" resultType="com.test.entity.Permission">
+        SELECT
+            p.*
+        FROM
+            tb_user AS u
+        LEFT JOIN tb_user_role AS ur ON u.id = ur.user_id
+        LEFT JOIN tb_role_permission rp ON ur.role_id = rp.role_id
+        LEFT JOIN tb_permission p ON rp.permission_id = p.id
+        WHERE
+            u.id = #{userid}
+    </select>
+
+</mapper>

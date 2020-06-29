@@ -59,10 +59,10 @@ public class CodeGenerator {
 
         // 5、策略配置
         StrategyConfig strategy = new StrategyConfig();
-        strategy.setLikeTable(new LikeTable("t", SqlLike.RIGHT));
+        strategy.setLikeTable(new LikeTable("tb", SqlLike.RIGHT));
         //strategy.setInclude("\\w*");//设置要映射的表名  3.3.0不在支持，改用上面的方式
         strategy.setNaming(NamingStrategy.underline_to_camel);//数据库表映射到实体的命名策略
-        strategy.setTablePrefix("t_");//设置表前缀不生成
+        strategy.setTablePrefix("tb_");//设置表前缀不生成
 
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);//数据库表字段映射到实体的命名策略
         strategy.setEntityLombokModel(true); // lombok 模型 @Accessors(chain = true) setter链式操作
@@ -71,12 +71,12 @@ public class CodeGenerator {
         strategy.setEntityBooleanColumnRemoveIsPrefix(true);//去掉布尔值的is_前缀
 
         //自动填充
-//        TableFill gmtCreate = new TableFill("gmt_create", FieldFill.INSERT);
-//        TableFill gmtModified = new TableFill("gmt_modified", FieldFill.INSERT_UPDATE);
-//        ArrayList<TableFill> tableFills = new ArrayList<>();
-//        tableFills.add(gmtCreate);
-//        tableFills.add(gmtModified);
-//        strategy.setTableFillList(tableFills);
+        TableFill gmtCreate = new TableFill("created", FieldFill.INSERT);
+        TableFill gmtModified = new TableFill("updated", FieldFill.INSERT_UPDATE);
+        ArrayList<TableFill> tableFills = new ArrayList<>();
+        tableFills.add(gmtCreate);
+        tableFills.add(gmtModified);
+        strategy.setTableFillList(tableFills);
 //
 //        strategy.setVersionFieldName("version");//乐观锁列
 //

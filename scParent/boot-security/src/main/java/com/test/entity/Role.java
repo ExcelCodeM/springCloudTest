@@ -13,7 +13,7 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 用户表
+ * 角色表
  * </p>
  *
  * @author Breeze
@@ -22,8 +22,8 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("tb_user")
-public class User implements Serializable {
+@TableName("tb_role")
+public class Role implements Serializable {
 
     private static final long serialVersionUID=1L;
 
@@ -31,24 +31,24 @@ public class User implements Serializable {
     private Long id;
 
     /**
-     * 用户名
+     * 父角色
      */
-    private String username;
+    private Long parentId;
 
     /**
-     * 密码，加密存储
+     * 角色名称
      */
-    private String password;
+    private String name;
 
     /**
-     * 注册手机号
+     * 角色英文名称
      */
-    private String phone;
+    private String enname;
 
     /**
-     * 注册邮箱
+     * 备注
      */
-    private String email;
+    private String description;
 
     @TableField(fill = FieldFill.INSERT)
     private Date created;

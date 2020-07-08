@@ -9,6 +9,7 @@ import org.springframework.security.oauth2.config.annotation.configurers.ClientD
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
 import org.springframework.security.oauth2.provider.code.AuthorizationCodeServices;
@@ -16,10 +17,13 @@ import org.springframework.security.oauth2.provider.code.InMemoryAuthorizationCo
 import org.springframework.security.oauth2.provider.code.JdbcAuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
+import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 
 import javax.sql.DataSource;
+import java.util.Arrays;
 
 /**
  * @author ：Breeze
@@ -37,15 +41,22 @@ public class SecurityOAuthConfig extends AuthorizationServerConfigurerAdapter {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Autowired
+    private TokenStore tokenStore;
+
+    @Autowired
+    private JwtAccessTokenConverter jwtAccessTokenConverter;
+
     /**
      * 配置令牌存储方式，本次采用数据库存储
      *
      * @return
      */
-    @Bean
-    public TokenStore getTokenStore() {
-        return new JdbcTokenStore(dataSource);
-    }
+    //使用jwtTokenStore
+//    @Bean
+//    public TokenStore getTokenStore() {
+//        return new JdbcTokenStore(dataSource);
+//    }
 
     /**
      * 配置客户端详情存储方式，本次采用数据库存储
@@ -62,19 +73,31 @@ public class SecurityOAuthConfig extends AuthorizationServerConfigurerAdapter {
      *
      * @return
      */
+    /**
+     * 使用jwt相关的AuthorizationServerTokenServices
+     * @return
+     */
     @Bean
     public AuthorizationServerTokenServices tokenService() {
         DefaultTokenServices service = new DefaultTokenServices();
-        service.setTokenStore(getTokenStore());  //设置令牌存储方式
+        //service.setTokenStore(getTokenStore());  //设置令牌存储方式
+        service.setTokenStore(tokenStore);  //设置令牌存储方式
         service.setClientDetailsService(jdbcClientDetails());   //设置客户端存储方式
         service.setSupportRefreshToken(true);   //是否支持刷新令牌
         service.setAccessTokenValiditySeconds(60 * 60 * 2);     //设置令牌过期时间 2小时
         service.setRefreshTokenValiditySeconds(60 * 60 * 24 * 3);   //设置刷新令牌的有效期 3天
+
+        TokenEnhancerChain chain = new TokenEnhancerChain();
+        chain.setTokenEnhancers(Arrays.asList(jwtAccessTokenConverter));
+        service.setTokenEnhancer(chain);
+
         return service;
     }
 
+
     /**
      * 设置授权码服务
+     *
      * @return
      */
     @Bean
@@ -100,7 +123,8 @@ public class SecurityOAuthConfig extends AuthorizationServerConfigurerAdapter {
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-        endpoints.tokenStore(getTokenStore())
+        //endpoints.tokenStore(getTokenStore())
+        endpoints.tokenStore(tokenStore)
                 .tokenServices(tokenService())
                 .authenticationManager(authenticationManager)
                 .authorizationCodeServices(authorizationCodeServices())
@@ -108,5 +132,10 @@ public class SecurityOAuthConfig extends AuthorizationServerConfigurerAdapter {
     }
 
 
-
+    @Override
+    public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
+        security.tokenKeyAccess("permitAll()")
+                .checkTokenAccess("permitAll()")
+                .allowFormAuthenticationForClients();
+    }
 }

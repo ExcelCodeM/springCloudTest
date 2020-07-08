@@ -1,0 +1,17 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: boot-security-oauth2-resource
+
+#security:
+#  oauth2:
+#    client:
+#      client-id: client
+#      client-secret: $2a$10$iEJYo2EVbg8UIIuSRZ27uuWoGfVoOucao3Ktj2Uoq2KqVZEHE.V6O
+#      access-token-uri: http://localhost:8080/oauth/token
+#      user-authorization-uri: http://localhost:8080/oauth/authorize
+#    resource:
+#      token-info-uri: http://localhost:8080/oauth/check_token
+

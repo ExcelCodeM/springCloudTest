@@ -42,6 +42,8 @@
         <module>boot-kafka</module>
         <module>boot-security</module>
         <module>boot-security-oauth2-resource</module>
+        <module>spring-caffeine-cache10001</module>
+        <module>design-pattern</module>
     </modules>
 
     <properties>

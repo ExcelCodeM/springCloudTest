@@ -1,23 +1,18 @@
 package com.test;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
  * @author ：Breeze
- * @date ：Created in 2020/6/7 22:09
+ * @date ：Created in 2020/11/8 23:05
  * @description：
  */
 
 @SpringBootApplication
-public class Application {
-
-
-    private static final Logger logger = LoggerFactory.getLogger(Application.class);
+public class Application10001 {
 
     public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+        SpringApplication.run(Application10001.class, args);
     }
 }

@@ -1,7 +1,9 @@
 package com.test.controller;
 
 
-import com.test.kafka.KafkaProducer;
+import com.test.kafka.KafkaClientConsumer;
+import com.test.kafka.KafkaClientProducer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,9 +16,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class KafkaController {
 
-    @GetMapping("kafkaTest")
-    public String kafkaTest(){
-        new KafkaProducer().send();
+    @Autowired
+    KafkaClientProducer producer;
+
+    @Autowired
+    KafkaClientConsumer consumer;
+
+    @GetMapping("/kafkaClient")
+    public String kafkaClient(){
+        producer.sendMsg();
+        return "ok";
+    }
+
+    @GetMapping("/sub")
+    public String kafkaSub(){
+        consumer.record();
         return "ok";
     }
 

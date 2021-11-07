@@ -45,6 +45,7 @@
         <module>spring-caffeine-cache10001</module>
         <module>design-pattern</module>
         <module>java-juc</module>
+        <module>boot-rabbitmq</module>
     </modules>
 
     <properties>

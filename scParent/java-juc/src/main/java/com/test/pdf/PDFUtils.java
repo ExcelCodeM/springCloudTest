@@ -2,13 +2,15 @@ package com.test.pdf;
 
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.http.HttpUtil;
+import com.itextpdf.text.Document;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.AcroFields;
 import com.itextpdf.text.pdf.BaseFont;
-import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfStamper;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.PushbuttonField;
 import org.springframework.util.CollectionUtils;
 
 import java.io.BufferedInputStream;
@@ -19,12 +21,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.List;
 import java.util.Map;
 
 public class PDFUtils {
 
-    public static void genPdf(Map map, String sourceFile, String targetFile) {
+    public static void genPdf(Map map, Map imageData, String sourceFile, String targetFile) {
         InputStream inputStream = null;
         ByteArrayOutputStream output = null;
         byte[] buffer = new byte[0];
@@ -41,7 +42,7 @@ public class PDFUtils {
             while (-1 != (n = inputStream.read(buffer))) {
                 output.write(buffer, 0, n);
             }
-            fillParam(map, output.toByteArray(), targetFile);
+            fillPdfParam(map, imageData, output.toByteArray(), targetFile);
             output.flush();
         } catch (IOException e) {
 //            log.error("数据填充pdf异常！{}", e.getMessage());
@@ -55,7 +56,7 @@ public class PDFUtils {
     /**
      * pdf填充（设置字体）
      */
-    public static void fillParam(Map<String, String> fieldValueMap, byte[] file, String contractFileName) {
+    public static void fillPdfParam(Map<String, String> fieldValueMap, Map<String, String> imageData, byte[] file, String contractFileName) {
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(contractFileName);
@@ -77,9 +78,7 @@ public class PDFUtils {
                         acroFields.setField(fieldName, String.valueOf(fieldValueMap.get(fieldName)));
                     }
                 }
-                if (!CollectionUtils.isEmpty(acroFields.getFieldPositions("companyLegalPersonSign_af_image")) && fieldValueMap.containsKey("companyLegalPersonSign")) {
-                    insertImage(stamper, acroFields, fieldValueMap.get("companyLegalPersonSign"), "companyLegalPersonSign_af_image");
-                }
+                insertImage(stamper, acroFields, imageData);
                 stamper.setFormFlattening(false);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -111,28 +110,48 @@ public class PDFUtils {
     /**
      * PDF插入图片
      */
-    public static void insertImage(PdfStamper ps, AcroFields s, String fieldValue, String fieldKey) {
-//        if (StringUtil.isBlank(fieldValue)) {
-//            return;
-//        }
-        InputStream is = null;
+    public static void insertImage(PdfStamper ps, AcroFields s, Map<String, String> imageData) {
+        if (CollectionUtils.isEmpty(imageData)) {
+            return;
+        }
         try {
-            List<AcroFields.FieldPosition> list = s.getFieldPositions(fieldKey);
-            for (AcroFields.FieldPosition fieldPosition : list) {
-                Rectangle signRect = fieldPosition.position;
-                is = PDFUtils.getInputStreamByHttpUrl(fieldValue);
-                Image image = Image.getInstance(IoUtil.readBytes(is));
-                PdfContentByte under = ps.getOverContent(fieldPosition.page);
-                float x = signRect.getLeft();
-                float y = signRect.getBottom() - (signRect.getHeight() / 2);
-                image.setAbsolutePosition(x, y);
-                image.scaleToFit(signRect.getWidth() * 2f, signRect.getHeight() * 2f);
-                under.addImage(image);
+
+            for (Map.Entry<String, String> entry : imageData.entrySet()) {
+                String fieldKey = entry.getKey();
+                String fieldValue = entry.getValue();
+                if (s.getField(fieldKey) != null) {
+                    PushbuttonField newPushbuttonFromField = s.getNewPushbuttonFromField(fieldKey);
+                    newPushbuttonFromField.setLayout(PushbuttonField.LAYOUT_ICON_ONLY);
+                    newPushbuttonFromField.setProportionalIcon(true);
+                    newPushbuttonFromField.setImage(Image.getInstance(fieldValue));
+                    s.replacePushbuttonField(fieldKey, newPushbuttonFromField.getField());
+                }
             }
+
+
+//            List<AcroFields.FieldPosition> list = s.getFieldPositions(fieldKey);
+//            for (AcroFields.FieldPosition fieldPosition : list) {
+////                Rectangle signRect = fieldPosition.position;
+////                is = PDFUtils.getInputStreamByHttpUrl(fieldValue);
+//                Image image = Image.getInstance(IoUtil.readBytes(new FileInputStream(fieldValue)));
+////                PdfContentByte under = ps.getOverContent(fieldPosition.page);
+////                float x = signRect.getLeft();
+////                float y = signRect.getBottom();
+//////                float y = signRect.getBottom() - (signRect.getHeight() / 2);
+////                image.setAbsolutePosition(x, y);
+//
+//                PushbuttonField newPushbuttonFromField = s.getNewPushbuttonFromField(fieldKey);
+//                newPushbuttonFromField.setLayout(PushbuttonField.LAYOUT_ICON_ONLY);
+//                newPushbuttonFromField.setProportionalIcon(true);
+//                newPushbuttonFromField.setImage(Image.getInstance(fieldValue));
+//
+//                s.replacePushbuttonField(fieldKey, newPushbuttonFromField.getField());
+//
+////                image.scaleToFit(signRect.getWidth() * 2f, signRect.getHeight() * 2f);
+////                under.addImage(image);
+//            }
         } catch (Exception ex) {
             ex.printStackTrace();
-        } finally {
-            IoUtil.close(is);
         }
 
 
@@ -160,5 +179,45 @@ public class PDFUtils {
         return bis;
     }
 
-
+    /**
+     * 图片生成pdf
+     *
+     * @param source
+     * @param target
+     */
+    public static void convert(String source, String target) {
+        Document document = new Document();
+        // 设置文档页边距
+        document.setMargins(0, 0, 0, 0);
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(target);
+            PdfWriter.getInstance(document, fos);
+            // 打开文档
+            document.open();
+            // 获取图片的宽高
+            Image image = Image.getInstance(source);
+            float imageHeight = image.getScaledHeight();
+            float imageWidth = image.getScaledWidth();
+            // 设置页面宽高与图片一致
+            Rectangle rectangle = new Rectangle(imageWidth, imageHeight);
+            document.setPageSize(rectangle);
+            // 图片居中
+            image.setAlignment(Image.ALIGN_CENTER);
+            // 新建一页添加图片
+            document.newPage();
+            document.add(image);
+        } catch (Exception ioe) {
+            System.out.println(ioe.getMessage());
+        } finally {
+            // 关闭文档
+            document.close();
+            try {
+                fos.flush();
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 import java.util.Map;
 
 public class PDFUtils {
@@ -207,6 +208,52 @@ public class PDFUtils {
             // 新建一页添加图片
             document.newPage();
             document.add(image);
+        } catch (Exception ioe) {
+            System.out.println(ioe.getMessage());
+        } finally {
+            // 关闭文档
+            document.close();
+            try {
+                fos.flush();
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    /**
+     * 图片生成pdf
+     *
+     * @param sources
+     * @param target
+     */
+    public static void convert(List<String> sources, String target) {
+        Document document = new Document();
+        // 设置文档页边距
+        document.setMargins(0, 0, 0, 0);
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(target);
+            PdfWriter.getInstance(document, fos);
+            // 打开文档
+            document.open();
+            // 获取图片的宽高
+            for (String source : sources) {
+                Image image = Image.getInstance(source);
+                // 设置页面大小
+                Rectangle rectangle = new Rectangle(794, 1122);
+                document.setPageSize(rectangle);
+                if (image.getScaledWidth() > 794) {
+                    image.scaleAbsolute(794, (794 / image.getScaledWidth()) * 1122);
+                }
+                // 图片居中
+                image.setAlignment(Image.ALIGN_CENTER);
+                // 新建一页添加图片
+                document.newPage();
+                document.add(image);
+            }
         } catch (Exception ioe) {
             System.out.println(ioe.getMessage());
         } finally {

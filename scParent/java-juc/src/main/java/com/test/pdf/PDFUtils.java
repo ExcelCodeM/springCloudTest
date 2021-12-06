@@ -68,6 +68,8 @@ public class PDFUtils {
                 reader = new PdfReader(file);
                 stamper = new PdfStamper(reader, fos);
                 fos.flush();
+                //德语字体
+//                base = BaseFont.createFont("E:\\project\\springCloudTest\\scParent\\java-juc\\src\\main\\resources\\arialunicodems.ttf",BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
                 base = BaseFont.createFont("STSong-Light", "UniGB-UCS2-H", BaseFont.NOT_EMBEDDED);
                 AcroFields acroFields = stamper.getAcroFields();
                 for (String key : acroFields.getFields().keySet()) {

@@ -8,6 +8,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 
@@ -15,6 +16,7 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
+@Async
 @Aspect
 @Component
 public class EventTrackingAspect {
@@ -25,6 +27,7 @@ public class EventTrackingAspect {
 
     @Before("pointCut()")
     public void before(JoinPoint joinPoint) {
+        System.out.println("aop： " + Thread.currentThread().getId());
         // 获取处理器，装到ThreadLocl内
         AbstractEventTrackingHandler handler = getHandlerByAnnotation(joinPoint);
         if (!ObjectUtils.isEmpty(handler)) {

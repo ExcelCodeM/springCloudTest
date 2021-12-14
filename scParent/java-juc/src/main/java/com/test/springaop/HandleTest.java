@@ -1,10 +1,9 @@
 package com.test.springaop;
 
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 
 @Component
-public class HandleTest extends AbstractEventTrackingHandler implements InitializingBean {
+public class HandleTest extends AbstractEventTrackingHandler {
 
     @Override
     public void getData() {
@@ -12,7 +11,7 @@ public class HandleTest extends AbstractEventTrackingHandler implements Initiali
     }
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         EventTrackingRegister.register(EventTrackingRegister.EventName.REGISTER_BUTTON_CLICK.getFieldName(), this);
         System.out.println("123");
     }

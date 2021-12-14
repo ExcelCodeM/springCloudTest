@@ -6,11 +6,11 @@ import org.springframework.stereotype.Component;
 public class TestAspect {
 
     @EventTracking(eventName = "RegisterButtonClick")
-    public String aaa(String aa) {
+    public void aaa(String aa) {
         System.out.println("hehe: " + Thread.currentThread().getId());
-//        System.out.println(1 / 0);
+        System.out.println(1 / 0);
 
-        return "123";
+//        return "123";
 
     }
 

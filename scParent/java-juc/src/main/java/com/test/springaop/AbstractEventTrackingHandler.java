@@ -1,11 +1,13 @@
 package com.test.springaop;
 
+import org.springframework.beans.factory.InitializingBean;
+
 import java.util.Map;
 
 /**
  * 埋点事件处理抽象类
  */
-public abstract class AbstractEventTrackingHandler {
+public abstract class AbstractEventTrackingHandler implements InitializingBean {
 
     /**
      * 切点 入参 map

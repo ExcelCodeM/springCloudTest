@@ -3,6 +3,9 @@ package com.test.prototype;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 原型模式
+ */
 public class Demo {
     public static void main(String[] args) {
         List<Shape> shapes = new ArrayList<>();

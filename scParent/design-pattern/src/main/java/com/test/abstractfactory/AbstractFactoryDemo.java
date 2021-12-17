@@ -6,6 +6,8 @@ package com.test.abstractfactory;
  * 默认创建了windows和MacOS风格两种
  * <p>
  * 如若以后需要添加新的风格类型，只需要继承GUIFactory，新增工厂即可，不用修改原代码
+ * <p>
+ * 抽象工厂
  */
 public class AbstractFactoryDemo {
 

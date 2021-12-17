@@ -4,6 +4,8 @@ package com.test.adapter;
  * Somewhere in client code...
  * <p>
  * 实际上，就是实现了一个适配器类，实现了承上启下的作用
+ * <p>
+ * 适配器模式
  */
 public class Demo {
     public static void main(String[] args) {

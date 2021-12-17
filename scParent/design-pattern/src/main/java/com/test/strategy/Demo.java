@@ -8,6 +8,8 @@ import java.util.Map;
 
 /**
  * World first console e-commerce application.
+ * <p>
+ * 策略模式
  */
 public class Demo {
     private static Map<Integer, Integer> priceOnProducts = new HashMap<>();

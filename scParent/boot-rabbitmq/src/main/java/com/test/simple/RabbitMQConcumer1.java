@@ -12,7 +12,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeoutException;
 
-public class RabbitMQConcumer {
+public class RabbitMQConcumer1 {
 
     public static final String QUEUE_NAME = "Hello";
 

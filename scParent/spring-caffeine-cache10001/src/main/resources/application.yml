@@ -2,10 +2,16 @@ server:
   port: 10001
 
 spring:
-  cache:
-    cache-names: userIdCache,userNameCache
-    multi:
-      caffeine:
-        expireAfterAccess: 5000
-      redis:
-        defaultExpiration: 60000
+  redis:
+    host: 47.115.158.112
+    port: 6379
+    database: 0
+    password: hehe@HEHE123
+    lettuce:
+      pool:
+        max-active: 8
+        max-wait: -1
+        max-idle: 8
+        min-idle: 0
+      shutdown-timeout: 100
+

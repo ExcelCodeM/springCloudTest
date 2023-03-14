@@ -41,7 +41,7 @@
         <module>cloudalibaba-seata-account-service2003</module>
         <module>boot-kafka</module>
         <module>boot-security</module>
-        <module>boot-security-oauth2-resource</module>
+        <module>boot-security-oauth2</module>
         <module>spring-caffeine-cache10001</module>
         <module>design-pattern</module>
         <module>java-juc</module>
